@@ -63,6 +63,9 @@ io.sockets.on('connection', (socket) ->
   console.log('socket io up')
   socket.emit('connected', { connected: true })
   socket.on('message', (data) ->
+    if !GLOBAL.sphero
+      sphero.connect()
+
     console.log(data)
     switch data.action
       when 'roll'
@@ -84,9 +87,6 @@ io.sockets.on('connection', (socket) ->
         rgb = color()
         if GLOBAL.sphero
           GLOBAL.sphero.setRGBLED(rgb[0], rgb[1], rgb[2], false)
-      when 'stop'
-        if GLOBAL.sphero
-          sphero.roll(0, 0)
       else
         console.log('bad key')
   )

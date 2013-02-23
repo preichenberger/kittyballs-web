@@ -15,6 +15,7 @@
     "jade": "*",
     "keypress": "*",
     "node-sphero": "*",
+    "node-thunder-driver": "*",
     "opentok": "*",
     "redis": "*",
     "singleconfig": "*",

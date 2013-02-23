@@ -1,10 +1,33 @@
-extends ../layout
+extends ../layout-stream
 
 block title
   = "Streaming"
 
 block content
-  #stream(data-session-id=sessionId, data-api-key=apiKey, data-token=token)
+  .span9.well
+    #stream(data-session-id=sessionId, data-api-key=apiKey, data-token=token)
+  .span3.well.sidebar
+    br
+    center
+      img(src="/images/avatar.png")
+    br
+    ul.unstyled
+      li
+        strong Name: 
+        span Fluffy
+      li
+        strong Breed: 
+        span Ragdoll
+      li
+        strong Vaccinations: 
+        span.label.label-success Fully vaccinated
+      li
+        strong Description: 
+        span Very fluffy! She’s always up for a good snuggle. However, not a perfect 5 due to her fur sometimes getting out of control!
+      li
+        br
+        center
+          button.btn.btn-large.btn-success Adopt
 
   script(
     src="http://static.opentok.com/webrtc/v2.0/js/TB.min.js",
@@ -35,8 +58,10 @@ block content
         for (i = 0; i < streams.length; i++) {
           var stream = streams[i];
           if (stream.connection.connectionId != session.connection.connectionId) {
-            console.log('hi')   
-            session.subscribe(stream, '#stream');
+            session.subscribe(stream, 'stream', {
+              width: 870,
+              height: 600,
+            });
           }
         }
       }
@@ -48,7 +73,6 @@ block content
       // Controls
       console.log(socketURL)
       var socket = io.connect(socketURL);
-      console.log(socket)
       socket.on('connected', function(data) {
         $(document).keyup(function(e) {
           socket.emit('message', { action: 'stop' });

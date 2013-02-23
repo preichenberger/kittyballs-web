@@ -1018,6 +1018,14 @@ a.label:hover,a.label:focus,a.badge:hover,a.badge:focus{color:#ffffff;text-decor
 .show{display:block;}
 .invisible{visibility:hidden;}
 .affix{position:fixed;}
+.brand img{height:40px;}
+.content{padding-top:40px;}
+.navbar-inner{background:rgba(255, 255, 255, 0.5);border:none;}
+.navbar .nav>li>a{color:black;text-shadow:none;line-height:40px;}
+.footer{background-color:white;height:120px;}
+.hero-unit{margin:40px;background-color:rgba(255, 255, 255, 0.5);}
+body.video{background-color:#7c7b7c;}
+body.video .sidebar{background-color:white;padding:20px;}
 .clearfix{*zoom:1;}.clearfix:before,.clearfix:after{display:table;content:"";line-height:0;}
 .clearfix:after{clear:both;}
 .hide-text{font:0/0 a;color:transparent;text-shadow:none;background-color:transparent;border:0;}
