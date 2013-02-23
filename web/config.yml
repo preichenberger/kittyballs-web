@@ -16,6 +16,7 @@ development:
   
 test:
   <<: *defaults
+  port:: {{ env.PORT }}
 
 production:
   <<: *defaults
