@@ -14,8 +14,7 @@ block content
     id='socketio',
     src="http://" + hostname + ":5001/socket.io/socket.io.js",
     type="text/javascript",
-    data-url="http://" + hostname + ":5001"
-  )
+    data-url="http://" + hostname + ":5001/")
 
   script(type="text/javascript")
     $(document).ready(function() {
@@ -47,23 +46,30 @@ block content
       }
 
       // Controls
+      console.log(socketURL)
       var socket = io.connect(socketURL);
-      $(document).keypress(function(e) {
-        var keyCode = (e.keyCode ? e.keyCode : e.which);
-        console.log(keyCode)
-        if (keyCode == 100) {
-          // Right
-        } else if (keyCode == 120) {
-          // Down
-          console.log('down');
-          socket.emit('command', { action: 'back' });
-        } else if (keyCode == 119) {
-          // Up
-          console.log('roll')
-          socket.emit('command', { action: 'roll' });
-        } else if (keyCode == 115) {
-          // Left
-          socket.emit('command', { action: 'data' });
-        }
+      console.log(socket)
+      socket.on('connected', function(data) {
+        $(document).keypress(function(e) {
+          var keyCode = (e.keyCode ? e.keyCode : e.which);
+          console.log(keyCode)
+          if (keyCode == 100) {
+            // Right
+          } else if (keyCode == 120) {
+            // Down
+            console.log('down');
+            socket.emit('message', { action: 'back' });
+          } else if (keyCode == 119) {
+            // Up
+            console.log('roll')
+            socket.emit('message', { action: 'roll' });
+          } else if (keyCode == 115) {
+            // Left
+            socket.emit('message', { action: 'data' });
+          } else if (keyCode == 32) {
+            // Space
+            socket.emit('message', { action: 'color' });
+          }
+        });
       });
     });

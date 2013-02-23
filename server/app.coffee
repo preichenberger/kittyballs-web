@@ -53,16 +53,28 @@ server.listen(config.port)
 console.log("Started app on port: #{config.port}")
 
 # Socket io
-io = require('socket.io').listen(app)
+color = () ->
+  r = Math.random() * 255
+  g = Math.random() * 255
+  b = Math.random() * 255
+  return [r,g,b]
+
+
 io.sockets.on('connection', (socket) ->
-  socket.emit('connected', {})
-  socket.on('command', (data) ->
+  console.log('yay')
+  socket.emit('connected', { connected: true })
+  socket.on('message', (data) ->
     console.log(data)
     switch data.action
       when 'roll'
-        console.log('rolling')
+        if GLOBAL.sphero
+          GLOBAL.sphero.roll(0, .5)
       when 'back'
         console.log('back')
+        GLOBAL.sphero.roll(0, .5)
+      when 'color'
+        rgb = color()
+        GLOBAL.sphero.setRGBLED(rgb[0], rgb[1], rgb[2], false)
       else
         console.log('bad key')
   )
