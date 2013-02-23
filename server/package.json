@@ -1,6 +1,6 @@
 {
-  "name": "kittyballs-web",
-  "description": "Move balls around your kitty",
+  "name": "kittyballs-server",
+  "description": "",
   "author": "",
   "version": "0.0.1",
   "private": "true",
@@ -10,17 +10,14 @@
   },
   "dependencies": {
     "async": "*",
-    "bootstrap": "git+https://github.com/twitter/bootstrap.git#v2.3.0",
     "coffee-script": "*",
     "express": "*",
     "jade": "*",
-    "less-middleware": "*",
-    "mongoose": "*",
-    "node-uuid": "*",
+    "node-sphero": "*",
     "opentok": "*",
-    "passport": "*",
     "redis": "*",
-    "singleconfig": "*"
+    "singleconfig": "*",
+    "socket.io": "*"
   },
   "devDependencies": {
    "node-dev": "*"

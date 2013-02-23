@@ -10,13 +10,21 @@ block content
     src="http://static.opentok.com/webrtc/v2.0/js/TB.min.js",
     type="text/javascript"
   )
+  script(
+    id='socketio',
+    src="http://" + hostname + ":5001/socket.io/socket.io.js",
+    type="text/javascript",
+    data-url="http://" + hostname + ":5001"
+  )
 
   script(type="text/javascript")
     $(document).ready(function() {
       var apiKey = $('#stream').attr('data-api-key');
       var sessionId = $('#stream').attr('data-session-id');
       var token = $('#stream').attr('data-token');
+      var socketURL = $('#socketio').attr('data-url');
       var session = TB.initSession(sessionId);
+
       session.connect(apiKey, token);
       session.addEventListener('sessionConnected', sessionConnectedHandler);
 
@@ -37,4 +45,25 @@ block content
       function streamCreatedHandler(e) {
         subscribeToStreams(e.streams);
       }
+
+      // Controls
+      var socket = io.connect(socketURL);
+      $(document).keypress(function(e) {
+        var keyCode = (e.keyCode ? e.keyCode : e.which);
+        console.log(keyCode)
+        if (keyCode == 100) {
+          // Right
+        } else if (keyCode == 120) {
+          // Down
+          console.log('down');
+          socket.emit('command', { action: 'back' });
+        } else if (keyCode == 119) {
+          // Up
+          console.log('roll')
+          socket.emit('command', { action: 'roll' });
+        } else if (keyCode == 115) {
+          // Left
+          socket.emit('command', { action: 'data' });
+        }
+      });
     });
