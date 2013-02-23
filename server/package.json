@@ -13,6 +13,7 @@
     "coffee-script": "*",
     "express": "*",
     "jade": "*",
+    "keypress": "*",
     "node-sphero": "*",
     "opentok": "*",
     "redis": "*",

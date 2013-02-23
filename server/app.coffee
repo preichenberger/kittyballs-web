@@ -12,7 +12,6 @@ io = require('socket.io').listen(server)
 # Sphero
 sphero = new roundRobot.Sphero()
 sphero.on('connected', (ball) ->
-  console.log(ball)
   GLOBAL.sphero = ball
   console.log('Connected to sphero')
 )
@@ -61,7 +60,7 @@ color = () ->
 
 
 io.sockets.on('connection', (socket) ->
-  console.log('yay')
+  console.log('socket io up')
   socket.emit('connected', { connected: true })
   socket.on('message', (data) ->
     console.log(data)
@@ -71,10 +70,23 @@ io.sockets.on('connection', (socket) ->
           GLOBAL.sphero.roll(0, .5)
       when 'back'
         console.log('back')
-        GLOBAL.sphero.roll(0, .5)
+        if GLOBAL.sphero
+          GLOBAL.sphero.roll(0, 0)
+      when 'left'
+        console.log('left')
+        if GLOBAL.sphero
+          sphero.setHeading(315)
+      when 'right'
+        console.log('right')
+        if GLOBAL.sphero
+          sphero.setHeading(45)
       when 'color'
         rgb = color()
-        GLOBAL.sphero.setRGBLED(rgb[0], rgb[1], rgb[2], false)
+        if GLOBAL.sphero
+          GLOBAL.sphero.setRGBLED(rgb[0], rgb[1], rgb[2], false)
+      when 'stop'
+        if GLOBAL.sphero
+          sphero.roll(0, 0)
       else
         console.log('bad key')
   )

@@ -50,22 +50,26 @@ block content
       var socket = io.connect(socketURL);
       console.log(socket)
       socket.on('connected', function(data) {
+        $(document).keyup(function(e) {
+          socket.emit('message', { action: 'stop' });
+        })
         $(document).keypress(function(e) {
           var keyCode = (e.keyCode ? e.keyCode : e.which);
           console.log(keyCode)
           if (keyCode == 100) {
             // Right
-          } else if (keyCode == 120) {
+            socket.emit('message', { action: 'right' });
+          } else if (keyCode == 115) {
             // Down
-            console.log('down');
+            console.log('back');
             socket.emit('message', { action: 'back' });
           } else if (keyCode == 119) {
             // Up
             console.log('roll')
             socket.emit('message', { action: 'roll' });
-          } else if (keyCode == 115) {
+          } else if (keyCode == 97) {
             // Left
-            socket.emit('message', { action: 'data' });
+            socket.emit('message', { action: 'left' });
           } else if (keyCode == 32) {
             // Space
             socket.emit('message', { action: 'color' });
