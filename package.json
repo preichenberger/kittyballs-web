@@ -1,6 +1,6 @@
 {
-  "name": "",
-  "description": "",
+  "name": "fido",
+  "description": "Help fido",
   "author": "",
   "version": "0.0.1",
   "private": "true",
@@ -9,12 +9,15 @@
     "npm": "1.2.x"
   },
   "dependencies": {
+    "async": "*",
     "bootstrap": "git+https://github.com/twitter/bootstrap.git#v2.3.0",
     "coffee-script": "*",
     "express": "*",
     "jade": "*",
     "less-middleware": "*",
     "mongoose": "*",
+    "node-uuid": "*",
+    "opentok": "*",
     "passport": "*",
     "redis": "*",
     "singleconfig": "*"

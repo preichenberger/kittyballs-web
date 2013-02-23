@@ -1,6 +1,7 @@
 config = require('singleconfig')
 express = require('express')
 lessMiddleware = require('less-middleware')
+OpenTok = require('opentok')
 redis = require('redis')
 url = require('url')
 
@@ -15,24 +16,27 @@ GLOBAL.redisClient = redis.createClient(
 )
 GLOBAL.redisClient.auth(redisAuth[1])
 
+# OpenTok
+GLOBAL.opentokClient = new OpenTok.OpenTokSDK(config.apikey, config.apisecret)
+
 # Views
 app.set('view engine', 'jade')
-app.set('views', __dirname + '/view')
+app.set('views', "#{__dirname}/view")
 
 # Less
-bootstrapPath = __dirname + '/../../node_modules/bootstrap'
+bootstrapPath = "#{__dirname}/../../node_modules/bootstrap"
 app.use(lessMiddleware(
-  src: __dirname + '/asset/stylesheet'
-  paths: [bootstrapPath + '/less']
-  dest: __dirname + '/static/css'
+  src: "#{__dirname}/asset/stylesheet"
+  paths: ["#{bootstrapPath}/less"]
+  dest: "#{__dirname}/static/css"
   prefix: '/css'
   compress: true
 ))
 
 # Static
-app.use("/css", express.static(__dirname + '/static/css'))
-app.use("/images", express.static(__dirname + '/static/images'))
-app.use("/js", express.static(__dirname + '/static/js'))
+app.use("/css", express.static("#{__dirname}/static/css"))
+app.use("/images", express.static("#{__dirname}/static/images"))
+app.use("/js", express.static("#{__dirname}/static/js"))
 
 # Middleware
 app.use(express.cookieParser())
@@ -46,6 +50,8 @@ app.locals.pretty = true
 
 # View variables
 app.use((req, res, next) ->
+  req.user =
+    id: 1
   app.locals.req = req
   app.locals.session = req.session
   app.locals.currentUser = req.user
@@ -56,4 +62,4 @@ app.use((req, res, next) ->
 require('./route')(app)
 
 app.listen(config.port)
-console.log('Started app on port: ' + config.port)
+console.log("Started app on port: #{config.port}")
