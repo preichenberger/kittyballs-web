@@ -7,6 +7,9 @@ url = require('url')
 
 app = express()
 
+console.log(config)
+console.log(process.env)
+
 # Redis
 redisURL = url.parse(config.redis.url)
 redisAuth = redisURL.auth.split(':')
