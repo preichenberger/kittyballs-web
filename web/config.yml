@@ -1,5 +1,6 @@
 defaults: &defaults
   name: 'kittyballs'
+  action: '/stream'
   hostname: '192.168.1.107'
   demo:
     tokboxSessionId: '1_MX4yMzAxNzU1Mn4xMjcuMC4wLjF-U2F0IEZlYiAyMyAwODowNTowMiBQU1QgMjAxM34wLjk1Nzc4OTk2fg'
@@ -16,6 +17,7 @@ development:
   
 test:
   <<: *defaults
+  action: 'http://www.twitter.com/kittyballsapp' 
   hostname: 'www.kittyballs.org'
   port: {{ env.PORT }}
   redis:
