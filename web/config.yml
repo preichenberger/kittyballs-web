@@ -16,6 +16,7 @@ development:
   
 test:
   <<: *defaults
+  hostname: 'www.kittyballs.org'
   port:: {{ env.PORT }}
   redis:
     url: {{ env.REDISTOGO_URL }}
