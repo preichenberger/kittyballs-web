@@ -17,6 +17,8 @@ development:
 test:
   <<: *defaults
   port:: {{ env.PORT }}
+  redis:
+    url: 'redis://:@localhost:6379/'
 
 production:
   <<: *defaults
