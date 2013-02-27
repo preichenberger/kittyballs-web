@@ -50,6 +50,13 @@ block content
       session.connect(apiKey, token);
       session.addEventListener('sessionConnected', sessionConnectedHandler);
 
+      $(window).resize(function() {
+        $('#stream').css({
+          width: $('#stream').parent().width(),
+          height: Math.ceil($('#stream').parent().width() / 1.3)
+        });
+      });
+
       function sessionConnectedHandler(e) {
          subscribeToStreams(e.streams);
       }
@@ -59,8 +66,8 @@ block content
           var stream = streams[i];
           if (stream.connection.connectionId != session.connection.connectionId) {
             session.subscribe(stream, 'stream', {
-              width: 870,
-              height: 600,
+              width: $('#stream').width(),
+              height: Math.ceil($('#stream').width() / 1.3),
             });
           }
         }

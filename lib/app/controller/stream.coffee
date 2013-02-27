@@ -8,3 +8,11 @@ module.exports.show = (req, res) ->
     sessionId: config.demo.tokboxSessionId
 
   res.render('stream/show', locals)
+
+module.exports.broadcast = (req, res) ->
+  locals =
+    apiKey: config.tokbox.apikey
+    sessionId: config.demo.tokboxSessionId
+    token: config.demo.tokboxPublisherToken
+    
+  res.render('stream/broadcast', locals)
