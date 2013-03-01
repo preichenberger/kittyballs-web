@@ -94,13 +94,6 @@ console.log("Started app on port: #{config.port}")
 io.configure(() ->
   io.set("transports", ["xhr-polling"])
   io.set("polling duration", 10)
-  IoRedisStore = require('socket.io/lib/stores/redis')
-
-  io.set('store', new IoRedisStore(
-    redisPub: GLOBAL.redisClient
-    redisSub: GLOBAL.redisClient
-    redisClient: GLOBAL.redisClient
-  ))
 )
 
 io.sockets.on('connection', (socket) ->
