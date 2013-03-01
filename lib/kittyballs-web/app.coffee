@@ -91,6 +91,10 @@ server.listen(config.port)
 console.log("Started app on port: #{config.port}")
 
 # Socket io
+io.configure(() ->
+  io.set("transports", ["xhr-polling"])
+  io.set("polling duration", 10)
+)
 io.sockets.on('connection', (socket) ->
   socket.on('message', (data) ->
     socketioServer.handleMessage(io, socket, data)
