@@ -15,8 +15,8 @@ development:
   
 test:
   <<: *defaults
-  action: 'http://www.twitter.com/kittyballsapp' 
-  hostname: 'www.kittyballs.org'
+  mongo:
+    url: {{ env.MONGOHQ_URL }}
   port: {{ env.PORT }}
   redis:
     url: {{ env.REDISTOGO_URL }}
