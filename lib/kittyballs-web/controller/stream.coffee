@@ -1,30 +1,49 @@
-User = require('../model/user')
+Stream = require('../model/stream')
 config = require('singleconfig')
 
-module.exports.show = (req, res) ->
-  User.findSubscriberToken(req.params.id, (err, user) ->
+module.exports.index = (req, res) ->
+  Stream.find((err, streams) ->
     if err
       res.send(500)
 
-    if !user
-      res.send(404)
-
     locals =
-      apiKey: config.tokbox.apikey
-      hostname: config.hostname
-      token: user.openTokSubscriberToken
-      sessionId: user.openTokSession
+      streams: streams
+    res.render('stream/index', locals)
+  )
 
-    res.render('stream/show', locals)
+module.exports.show = (req, res) ->
+  Stream.findOne(
+    openTokSession: req.params.id
+    (err, stream) ->
+      if err
+        res.send(500)
+
+      if !stream
+        res.send(404)
+
+      locals =
+        apiKey: config.tokbox.apikey
+        token: stream.openTokSubscriberToken
+        sessionId: stream.openTokSession
+
+      res.render('stream/show', locals)
   )
 
 module.exports.broadcast = (req, res) ->
   if !req.user
     return res.redirect('/login')
 
-  locals =
-    apiKey: config.tokbox.apikey
-    sessionId: req.user.openTokSession
-    token: req.user.openTokPublisherToken
+  Stream.findOne(
+    openTokSession: req.params.id
+    _userId: req.user._id
+    (err, stream) ->
+      if err
+        res.send(500)
 
-  res.render('stream/broadcast', locals)
+      locals =
+        apiKey: config.tokbox.apikey
+        sessionId: stream.openTokSession
+        token: stream.openTokPublisherToken
+
+      res.render('stream/broadcast', locals)
+  )

@@ -14,3 +14,8 @@ run: |
 run_createuser: |
   source .env
   coffee bin/user-create.coffee $ROCK_ARGS
+
+
+run_createstream: |
+  source .env
+  coffee bin/stream-create.coffee $ROCK_ARGS

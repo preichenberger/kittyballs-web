@@ -4,7 +4,7 @@ User = require('../model/user')
 
 module.exports.index = (req, res) ->
   if req.user
-    return res.redirect('/stream/broadcast')
+    return res.redirect('/stream')
 
   res.render('root/index')
 

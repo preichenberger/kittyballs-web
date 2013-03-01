@@ -1,4 +1,4 @@
-User = require('./model/user')
+Stream = require('./model/stream')
 async = require('async')
 
 module.exports.handleMessage = (io, socket, data) ->
@@ -12,7 +12,6 @@ module.exports.handleMessage = (io, socket, data) ->
       else
         return
 
-      console.log(clients.length)
       if clients.length != 1
         return
       
@@ -27,18 +26,18 @@ module.exports.handleMessage = (io, socket, data) ->
         return
 
       # Verify publisher
-      User.findOne(
+      Stream.findOne(
         openTokPublisherToken: data.publisherToken
-        (err, user) ->
+        (err, stream) ->
           if (err)
             console.error(err.message)
             return
           
-          if user
-            socket.join(user.openTokSession)
-            clientNum = io.sockets.clients(user.openTokSession).length
+          if stream
+            socket.join(stream.openTokSession)
+            clientNum = io.sockets.clients(stream.openTokSession).length
             console.log(
-              "A publisher joined: #{user.openTokSession}, #{clientNum}"
+              "A publisher joined: #{stream.openTokSession}, #{clientNum}"
             )
 
           return

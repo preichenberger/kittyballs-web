@@ -1,0 +1,17 @@
+extends ../layout
+
+block title
+  = "Streams" 
+
+block content
+  .well
+    h2 Available streams
+    ul.unstyled
+      each stream in streams
+        li
+          h3
+            a(href="/stream/" + stream.openTokSession)= stream.name
+            if req.user && req.user._id == stream._userId
+              = " ("
+              a(href="/stream/" + stream.openTokSession + "/broadcast") Broadcast
+              =")"

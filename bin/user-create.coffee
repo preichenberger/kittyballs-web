@@ -1,4 +1,3 @@
-OpenTok = require('opentok')
 User = require('../lib/kittyballs-web/model/user')
 async = require('async')
 config = require('singleconfig')
@@ -9,11 +8,6 @@ program
   .version('0.0.1')
   .option('-e, --email <email>', 'specify an email')
   .parse(process.argv)
-
-GLOBAL.opentokClient = new OpenTok.OpenTokSDK(
-  config.tokbox.apikey,
-  config.tokbox.apisecret
-)
 
 mongoOptions = { db: { safe: true }}
 GLOBAL.mongoClient = mongoose.connect(
@@ -28,7 +22,7 @@ email = program.email
 password = ''
 
 if !program.email
-  console.log('ERROR: Email and password required')
+  console.log('ERROR: Email is required')
   process.exit(code=1)
 
 async.auto(
@@ -42,34 +36,8 @@ async.auto(
     )
     user.setPassword(results.password, callback)
   ]
-  openTokSession: ['userPassword', (callback, results) ->
-    GLOBAL.opentokClient.createSession(
-      '127.0.0.1',
-      { 'p2p.preference' : 'enabled' },
-      (result) ->
-        if !result
-          return callback(new Error('Could not create tokbox session'))
-
-        results.userPassword.openTokSession = result
-        callback(null, results.userPassword)
-    )
-  ]
-  openTokTokens: ['openTokSession', (callback, results) ->
-    user = results.openTokSession
-    user.openTokPublisherToken = GLOBAL.opentokClient.generateToken(
-      session_id: user.openTokSession
-      role: OpenTok.RoleConstants.PUBLISHER
-      connection_data: "userId:#{user.id}"
-    )
-    user.openTokSubscriberToken = GLOBAL.opentokClient.generateToken(
-      session_id: user.openTokSession
-      role: OpenTok.RoleConstants.Subscriber
-    )
-
-    callback(null, user)
-  ]
-  saveUser: ['openTokTokens', (callback, results) ->
-    results.openTokSession.save(callback)
+  saveUser: ['userPassword', (callback, results) ->
+    results.userPassword.save(callback)
   ]
   (err, results) ->
     if err

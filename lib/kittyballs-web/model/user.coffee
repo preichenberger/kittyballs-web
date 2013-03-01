@@ -5,22 +5,17 @@ mongoose = require('mongoose')
 userSchema = mongoose.Schema(
   email:
     type: String
-    require: true
+    required: true
     index:
       unique: true
       dropDups: true
   password:
     type: String
-    require: true
-  openTokSession:
-    type: String
-    require: true
-  openTokPublisherToken:
-    type: String
-    require: true
-  openTokSubscriberToken:
-    type: String
-    require: true
+    required: true
+  streams: [
+    type: mongoose.Schema.Types.ObjectId
+    ref: 'Stream'
+  ]
 )
 
 userSchema.methods.setPassword = (password, callback) ->
@@ -53,22 +48,5 @@ userSchema.statics.findAuthenticatedUser = (email, password, callback) ->
 
       return callback(null, results.authenticatedUser)
   )
-
-userSchema.statics.findSubscriberToken = (session, callback) ->
-  User = this
-  async.auto(
-    findUser: (subCallback) ->
-      User.findOne(
-        { openTokSession: session },
-        'openTokSubscriberToken openTokSession',
-        subCallback
-      )
-    (err, results) ->
-      if err
-        return callback(err)
-
-      return callback(null, results.findUser)
-  )
-
 
 module.exports = mongoose.model('User', userSchema)

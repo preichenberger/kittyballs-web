@@ -9,4 +9,10 @@
         img(src="/images/logo.png")
       ul.nav.pull-right
         li
-          a(href="#", data-toggle="modal") Kittyballs shelter
+          a(href="/stream") Kittyballs shelter
+        if req.user
+          li
+            a(href="/logout") Logout
+        else
+          li
+            a(href="/login") Login
