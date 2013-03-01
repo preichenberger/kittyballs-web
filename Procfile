@@ -1,1 +1,1 @@
-web: coffee lib/app/app.coffee 
+web: coffee lib/kittyballs-web/app.coffee 
