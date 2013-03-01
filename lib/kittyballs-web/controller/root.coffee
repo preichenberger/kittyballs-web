@@ -29,17 +29,17 @@ module.exports.postLogin = (req, res, next) ->
     )
 
   if !req.form.isValid
-    renderError()
+    return renderError()
 
   User.findAuthenticatedUser(req.form.email, req.form.password, (err, user) ->
     if err
-      renderError()
+      return renderError()
     if !user
-      renderError(new Error('Invalid email or password'))
+      return renderError(new Error('Invalid email or password'))
 
     req.login(user, (err) ->
       if err
-        renderError()
+        return renderError()
 
       return res.redirect('/')
     )
