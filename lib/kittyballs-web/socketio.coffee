@@ -2,6 +2,7 @@ Stream = require('./model/stream')
 async = require('async')
 
 module.exports.handleMessage = (io, socket, data) ->
+  console.log(data)
   if data.action == 'join'
     if !data.role
       return
