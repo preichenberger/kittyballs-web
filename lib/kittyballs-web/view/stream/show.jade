@@ -35,9 +35,9 @@ block content
   )
   script(
     id='socketio',
-    src="http://" + hostname + ":5001/socket.io/socket.io.js",
+    src="/socket.io/socket.io.js",
     type="text/javascript",
-    data-url="http://" + hostname + ":5001/")
+    data-url="/")
 
   script(type="text/javascript")
     $(document).ready(function() {
@@ -78,33 +78,46 @@ block content
       }
 
       // Controls
-      console.log(socketURL)
       var socket = io.connect(socketURL);
-      socket.on('connected', function(data) {
-        $(document).keyup(function(e) {
-          socket.emit('message', { action: 'stop' });
-        })
-        $(document).keypress(function(e) {
-          var keyCode = (e.keyCode ? e.keyCode : e.which);
-          console.log(keyCode)
-          if (keyCode == 100) {
-            // Right
-            socket.emit('message', { action: 'right' });
-          } else if (keyCode == 115) {
-            // Down
-            console.log('back');
-            socket.emit('message', { action: 'back' });
-          } else if (keyCode == 119) {
-            // Up
-            console.log('roll')
-            socket.emit('message', { action: 'roll' });
-          } else if (keyCode == 97) {
-            // Left
-            socket.emit('message', { action: 'left' });
-          } else if (keyCode == 32) {
-            // Space
-            socket.emit('message', { action: 'color' });
-          }
-        });
+      socket.emit('message', {
+        action: 'join',
+        role: 'subscriber',
+        room: sessionId
+      });
+
+      $(document).keydown(function(e) {
+        var keyCode = (e.keyCode ? e.keyCode : e.which);
+        console.log(keyCode)
+        if (keyCode == 68) {
+          // Right
+          socket.emit('message', {
+            action: 'right',
+            room: sessionId
+          });
+        } else if (keyCode == 83) {
+          // Down
+          socket.emit('message', {
+            action: 'back',
+            room: sessionId
+          });
+        } else if (keyCode == 87) {
+          // Up
+          socket.emit('message', {
+            action: 'roll',
+            room: sessionId
+          });
+        } else if (keyCode == 65) {
+          // Left
+          socket.emit('message', {
+            action: 'left',
+            room: sessionId
+          });
+        } else if (keyCode == 32) {
+          // Space
+          socket.emit('message', {
+            action: 'color',
+            room: sessionId
+          });
+        }
       });
     });

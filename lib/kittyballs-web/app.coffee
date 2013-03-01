@@ -1,11 +1,17 @@
 config = require('singleconfig')
 express = require('express')
 lessMiddleware = require('less-middleware')
+mongoose = require('mongoose')
 OpenTok = require('opentok')
+passport = require('./passport')
 redis = require('redis')
+RedisStore = require('connect-redis')(express)
+socketioServer = require('./socketio')
 url = require('url')
 
 app = express()
+server = require('http').createServer(app)
+io = require('socket.io').listen(server)
 
 # Redis
 redisURL = url.parse(config.redis.url)
@@ -16,8 +22,21 @@ GLOBAL.redisClient = redis.createClient(
 )
 GLOBAL.redisClient.auth(redisAuth[1])
 
+# Mongo
+mongoOptions = { db: { safe: true }}
+GLOBAL.mongoClient = mongoose.connect(
+  config.mongo.url,
+  mongoOptions,
+  (err, res) ->
+    if err
+      console.log ('ERROR connecting to mongo:' + err)
+)
+
 # OpenTok
 GLOBAL.opentokClient = new OpenTok.OpenTokSDK(config.apikey, config.apisecret)
+
+# Passport
+GLOBAL.passport = passport
 
 # Views
 app.set('view engine', 'jade')
@@ -43,6 +62,15 @@ app.use(express.cookieParser())
 app.use(express.bodyParser())
 app.use(express.logger('short'))
 app.use(express.errorHandler())
+app.use(express.session(
+  store: new RedisStore(
+    client: GLOBAL.redisClient
+  )
+  secret: 'keyboard cat'
+))
+app.use(GLOBAL.passport.initialize())
+app.use(GLOBAL.passport.session())
+
 
 # Local variables
 app.locals.config = config
@@ -50,8 +78,6 @@ app.locals.pretty = true
 
 # View variables
 app.use((req, res, next) ->
-  req.user =
-    id: 1
   app.locals.req = req
   app.locals.session = req.session
   app.locals.currentUser = req.user
@@ -61,5 +87,12 @@ app.use((req, res, next) ->
 # Routes
 require('./route')(app)
 
-app.listen(config.port)
+server.listen(config.port)
 console.log("Started app on port: #{config.port}")
+
+# Socket io
+io.sockets.on('connection', (socket) ->
+  socket.on('message', (data) ->
+    socketioServer.handleMessage(io, socket, data)
+  )
+)

@@ -11,16 +11,23 @@
   "dependencies": {
     "async": "*",
     "bootstrap": "git+https://github.com/twitter/bootstrap.git#v2.3.0",
+    "bcrypt": "*",
     "coffee-script": "*",
+    "connect-redis": "*",
+    "commander": "*",
     "express": "*",
+    "express-form": "*",
     "jade": "*",
     "less-middleware": "*",
     "mongoose": "*",
+    "mongoose-lifecycle": "*",
     "node-uuid": "*",
     "opentok": "*",
     "passport": "*",
+    "passport-local": "*",
     "redis": "*",
-    "singleconfig": "*"
+    "singleconfig": "*",
+    "socket.io": "*"
   },
   "devDependencies": {
    "node-dev": "*"
