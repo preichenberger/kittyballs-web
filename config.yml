@@ -1,7 +1,6 @@
 defaults: &defaults
   name: 'kittyballs'
   action: '/stream'
-  hostname: 'localhost'
   tokbox:
     apikey: {{ env.TOKBOX_APIKEY }}
     apisecret: {{ env.TOKBOX_APISECRET }}

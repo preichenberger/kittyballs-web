@@ -22,13 +22,17 @@ module.exports.handleMessage = (io, socket, data) ->
       return
 
     if data.role == 'publisher'
+      console.log('publisher')
       if !data.publisherToken
         return
 
+      console.log('hasPublisherTOken')
       # Verify publisher
       Stream.findOne(
         openTokPublisherToken: data.publisherToken
         (err, stream) ->
+          console.log(err)
+          console.log(stream)
           if (err)
             console.error(err.message)
             return
