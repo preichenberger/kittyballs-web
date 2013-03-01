@@ -23,6 +23,8 @@ test:
 
 production:
   <<: *defaults
+  mongo:
+    url: {{ env.MONGOHQ_URL }}
   port: {{ env.PORT }}
   redis:
     url: {{ env.REDISTOGO_URL }}
