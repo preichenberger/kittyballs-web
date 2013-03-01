@@ -92,8 +92,9 @@ console.log("Started app on port: #{config.port}")
 
 # Socket io
 io.configure(() ->
-  io.set("transports", ["xhr-polling"])
-  io.set("polling duration", 10)
+  io.set('transports', ['xhr-polling'])
+  io.set('polling duration', 10)
+  io.set('log level', 1)
 )
 
 io.sockets.on('connection', (socket) ->
