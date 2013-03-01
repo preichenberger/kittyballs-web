@@ -16,7 +16,7 @@
     "connect-redis": "*",
     "commander": "*",
     "express": "*",
-    "express-form": "*",
+    "express-form": "0.8.x",
     "jade": "*",
     "less-middleware": "*",
     "mongoose": "*",
