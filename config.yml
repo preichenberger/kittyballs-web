@@ -11,6 +11,8 @@ development:
     url: mongodb://:@localhost:27017/kittyballs
   redis:
     url: 'redis://:@localhost:6379/'
+  session:
+    secret: {{ env.SESSION_SECRET }} 
   
 test:
   <<: *defaults
@@ -19,6 +21,8 @@ test:
   port: {{ env.PORT }}
   redis:
     url: {{ env.REDISTOGO_URL }}
+  session:
+    secret: {{ env.SESSION_SECRET }} 
 
 production:
   <<: *defaults
@@ -27,3 +31,5 @@ production:
   port: {{ env.PORT }}
   redis:
     url: {{ env.REDISTOGO_URL }}
+  session:
+    secret: {{ env.SESSION_SECRET }} 
