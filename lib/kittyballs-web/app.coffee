@@ -41,8 +41,6 @@ socketioRedisClient = redis.createClient(
 )
 socketioRedisClient.auth(redisAuth[1])
 
-
-
 # Mongo
 mongoOptions = { db: { safe: true }}
 GLOBAL.mongoClient = mongoose.connect(
