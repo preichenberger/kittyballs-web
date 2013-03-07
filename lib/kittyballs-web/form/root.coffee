@@ -11,7 +11,7 @@ module.exports.login = (req, res, next) ->
   passwordField = field('password')
     .trim()
     .isAlphanumeric('Password must be alphanumeric')
-    .minLength(8, 'Password must be at least 8 characters')
+    .minLength(6, 'Password must be at least 6 characters')
     .required('A valid password is required')
     .notEmpty('A valid password is required')
 
