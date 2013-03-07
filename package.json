@@ -27,7 +27,8 @@
     "passport-local": "*",
     "redis": "*",
     "singleconfig": "*",
-    "socket.io": "*"
+    "socket.io": "*",
+    "uuid": "*"
   },
   "devDependencies": {
    "node-dev": "*"

@@ -49,22 +49,49 @@ block content
 
       session.connect(apiKey, token);
       session.addEventListener('sessionConnected', sessionConnectedHandler);
+      session.addEventListener('streamCreated', streamCreatedHandler);
+      session.addEventListener('streamDestroyed', streamDestroyedHandler);
 
-      $(window).resize(function() {
-        $('#stream').css({
-          width: $('#stream').parent().width(),
-          height: Math.ceil($('#stream').parent().width() / 1.3)
-        });
-      });
+      function setNotice() {
+        $('#stream').html(
+          '<h1>' + 
+          'Animals are napping or otherwise unavailable, check back later!' + 
+          '</h1>'
+        );
+        $('#stream').removeClass();
+        $('#stream').attr('style', '');
+      }    
+ 
+      function streamCreatedHandler(e) {
+        $('#stream').html('');
+      }
 
+      function streamDestroyedHandler(e) {
+        e.preventDefault();
+        setNotice(); 
+      }
+ 
       function sessionConnectedHandler(e) {
-         subscribeToStreams(e.streams);
+        subscribeToStreams(e.streams);
       }
 
       function subscribeToStreams(streams) {
+        if (streams.length == 0) {
+          setNotice(); 
+          return;
+        }
+
         for (i = 0; i < streams.length; i++) {
           var stream = streams[i];
           if (stream.connection.connectionId != session.connection.connectionId) {
+
+            $(window).resize(function() {
+              $('#stream').css({
+                width: $('#stream').parent().width(),
+                height: Math.ceil($('#stream').parent().width() / 1.3)
+              });
+            });
+
             session.subscribe(stream, 'stream', {
               width: $('#stream').width(),
               height: Math.ceil($('#stream').width() / 1.3),
@@ -73,18 +100,15 @@ block content
         }
       }
 
-      function streamCreatedHandler(e) {
-        subscribeToStreams(e.streams);
-      }
-
       // Controls
       var socket = io.connect(socketURL);
-      socket.emit('message', {
-        action: 'join',
-        role: 'subscriber',
-        room: sessionId
+      socket.on('connect', function() {
+        socket.emit('message', {
+          action: 'join',
+          role: 'subscriber',
+          room: sessionId
+        });
       });
-
       $(document).keydown(function(e) {
         var keyCode = (e.keyCode ? e.keyCode : e.which);
         console.log(keyCode)

@@ -1,3 +1,4 @@
+OpenTok = require('opentok')
 Stream = require('../model/stream')
 config = require('singleconfig')
 
@@ -16,14 +17,19 @@ module.exports.show = (req, res) ->
     openTokSession: req.params.id
     (err, stream) ->
       if err
-        res.send(500)
+        return res.send(500)
 
       if !stream
-        res.send(404)
+        return res.send(404)
+
+      subscriberToken = GLOBAL.opentokClient.generateToken(
+        session_id: stream.openTokSession
+        role: OpenTok.RoleConstants.SUBSCRIBER
+      )
 
       locals =
         apiKey: config.tokbox.apikey
-        token: stream.openTokSubscriberToken
+        token: subscriberToken
         sessionId: stream.openTokSession
 
       res.render('stream/show', locals)
@@ -38,12 +44,18 @@ module.exports.broadcast = (req, res) ->
     _userId: req.user._id
     (err, stream) ->
       if err
-        res.send(500)
+        return res.send(500)
+      
+      publisherToken = GLOBAL.opentokClient.generateToken(
+        session_id: stream.openTokSession
+        role: OpenTok.RoleConstants.PUBLISHER
+        connection_data: "userId:#{stream._userId}"
+      )
 
       locals =
         apiKey: config.tokbox.apikey
         sessionId: stream.openTokSession
-        token: stream.openTokPublisherToken
+        token: publisherToken
 
       res.render('stream/broadcast', locals)
   )

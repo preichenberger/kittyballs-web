@@ -61,22 +61,8 @@ async.auto(
         callback(null, stream)
     )
   ]
-  openTokTokens: ['openTokSession', (callback, results) ->
-    stream = results.openTokSession
-    stream.openTokPublisherToken = GLOBAL.opentokClient.generateToken(
-      session_id: stream.openTokSession
-      role: OpenTok.RoleConstants.PUBLISHER
-      connection_data: "userId:#{stream._userId}"
-    )
-    stream.openTokSubscriberToken = GLOBAL.opentokClient.generateToken(
-      session_id: stream.openTokSession
-      role: OpenTok.RoleConstants.Subscriber
-    )
-
-    callback(null, stream)
-  ]
-  saveStream: ['openTokTokens', (callback, results) ->
-    results.openTokTokens.save(callback)
+  saveStream: ['openTokSession', (callback, results) ->
+    results.openTokSession.save(callback)
   ]
   (err, results) ->
     if err

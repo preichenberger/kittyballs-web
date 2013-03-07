@@ -9,6 +9,7 @@ RedisStore = require('connect-redis')(express)
 socketioServer = require('./socketio')
 url = require('url')
 
+# Servers
 app = express()
 server = require('http').createServer(app)
 io = require('socket.io').listen(server)
@@ -20,6 +21,7 @@ GLOBAL.redisClient = redis.createClient(
   redisURL.port,
   redisURL.hostname
 )
+
 GLOBAL.redisClient.auth(redisAuth[1])
 
 # Mongo
@@ -33,7 +35,10 @@ GLOBAL.mongoClient = mongoose.connect(
 )
 
 # OpenTok
-GLOBAL.opentokClient = new OpenTok.OpenTokSDK(config.apikey, config.apisecret)
+GLOBAL.opentokClient = new OpenTok.OpenTokSDK(
+  config.tokbox.apikey,
+  config.tokbox.apisecret
+)
 
 # Passport
 GLOBAL.passport = passport
@@ -92,9 +97,17 @@ console.log("Started app on port: #{config.port}")
 
 # Socket io
 io.configure(() ->
+  SocketRedisStore = require('socket.io/lib/stores/redis')
+   
   io.set('transports', ['xhr-polling'])
   io.set('polling duration', 10)
   io.set('log level', 1)
+  io.set('close timeout', 10)
+  io.set('store', new SocketRedisStore(
+    redisPub: GLOBAL.redisClient,
+    redisSub: GLOBAL.redisClient,
+    redisClient: GLOBAL.redisClient,
+  ))
 )
 
 io.sockets.on('connection', (socket) ->

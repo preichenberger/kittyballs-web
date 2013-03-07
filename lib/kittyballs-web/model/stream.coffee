@@ -1,5 +1,6 @@
 async = require('async')
 mongoose = require('mongoose')
+uuid = require('uuid')
 
 streamSchema = mongoose.Schema(
   _userId: [
@@ -9,13 +10,11 @@ streamSchema = mongoose.Schema(
   name:
     type: String
     required: true
+  broadcastKey:
+    type: String
+    required: true
+    default: uuid.v4()
   openTokSession:
-    type: String
-    required: true
-  openTokPublisherToken:
-    type: String
-    required: true
-  openTokSubscriberToken:
     type: String
     required: true
 )
