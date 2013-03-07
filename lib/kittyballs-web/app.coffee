@@ -21,7 +21,7 @@ GLOBAL.redisClient = redis.createClient(
   redisURL.port,
   redisURL.hostname
 )
-
+console.log(redisAuth)
 GLOBAL.redisClient.auth(redisAuth[1])
 
 # Mongo
@@ -71,7 +71,7 @@ app.use(express.session(
   store: new RedisStore(
     client: GLOBAL.redisClient
   )
-  secret: 'keyboard cat'
+  secret: config.session.secret
 ))
 app.use(GLOBAL.passport.initialize())
 app.use(GLOBAL.passport.session())
