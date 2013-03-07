@@ -21,7 +21,6 @@ GLOBAL.redisClient = redis.createClient(
   redisURL.port,
   redisURL.hostname
 )
-console.log(redisAuth)
 GLOBAL.redisClient.auth(redisAuth[1])
 
 # Mongo
@@ -103,11 +102,6 @@ io.configure(() ->
   io.set('polling duration', 10)
   io.set('log level', 1)
   io.set('close timeout', 10)
-  io.set('store', new SocketRedisStore(
-    redisPub: GLOBAL.redisClient,
-    redisSub: GLOBAL.redisClient,
-    redisClient: GLOBAL.redisClient,
-  ))
 )
 
 io.sockets.on('connection', (socket) ->
