@@ -23,6 +23,26 @@ GLOBAL.redisClient = redis.createClient(
 )
 GLOBAL.redisClient.auth(redisAuth[1])
 
+socketioRedisPub = redis.createClient(
+  redisURL.port,
+  redisURL.hostname
+)
+socketioRedisPub.auth(redisAuth[1])
+
+socketioRedisSub = redis.createClient(
+  redisURL.port,
+  redisURL.hostname
+)
+socketioRedisSub.auth(redisAuth[1])
+
+socketioRedisClient = redis.createClient(
+  redisURL.port,
+  redisURL.hostname
+)
+socketioRedisClient.auth(redisAuth[1])
+
+
+
 # Mongo
 mongoOptions = { db: { safe: true }}
 GLOBAL.mongoClient = mongoose.connect(
@@ -104,9 +124,9 @@ io.configure(() ->
   io.set('close timeout', 10)
   io.set('store', new SocketRedisStore(
     redis: redis,
-    redisPub: GLOBAL.redisClient,
-    redisSub: GLOBAL.redisClient,
-    redisClient: GLOBAL.redisClient,
+    redisPub: socketioRedisPub,
+    redisSub: socketioRedisSub,
+    redisClient: socketioRedisClient
   ))
 )
 
